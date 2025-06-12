@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/arianaw15/birdie-talk/service/birds"
 	"github.com/arianaw15/birdie-talk/service/user"
 	"github.com/gorilla/mux"
 )
@@ -28,6 +29,9 @@ func (s *APIServer) Run() error {
 	userStore := user.NewStore(s.db)
 	userHandler := user.NewHandler(userStore)
 	userHandler.RegisterRoutes(subrouter)
+	birdStore := birds.NewStore(s.db)
+	birdHandler := birds.NewHandler(birdStore)
+	birdHandler.RegisterRoutes(subrouter)
 
 	log.Println("Running API server on", s.addr)
 	return http.ListenAndServe(s.addr, router)

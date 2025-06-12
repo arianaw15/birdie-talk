@@ -1,10 +1,10 @@
 CREATE TABLE IF NOT EXISTS birds (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(255) NOT NULL,
-    `species` VARCHAR(255) NOT NULL,
+    `commonName` VARCHAR(255) NOT NULL,
+    `scientificName` VARCHAR(255) NOT NULL,
     `description` VARCHAR(255) NOT NULL,
     `imageUrl` VARCHAR(255) NOT NULL,
     `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
-    UNIQUE KEY (`name`)
+    UNIQUE KEY (`scientificName`)
 );

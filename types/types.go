@@ -39,6 +39,7 @@ type BirdStore interface {
 	GetBirdById(birdId int) (*Bird, error)
 	GetBirdByName(name string) (*Bird, error)
 	CreateBird(bird *Bird) error
+	CreateInitialBirdList(birds []Bird) error
 }
 
 type Bird struct {
@@ -50,9 +51,9 @@ type Bird struct {
 	CreatedAt      time.Time `json:"createdAt"`
 }
 
-type RegisterBirdPayload struct {
-	CommonName     string `json:"commonName"`
-	ScientificName string `json:"scientificName"`
+type CreateBirdPayload struct {
+	CommonName     string `json:"commonName" validate:"required"`
+	ScientificName string `json:"scientificName" validate:"required"`
 	Description    string `json:"description"`
 	ImageURL       string `json:"imageUrl"`
 }
