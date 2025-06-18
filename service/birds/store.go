@@ -17,9 +17,9 @@ func NewStore(db *sql.DB) *Store {
 	}
 }
 
-func (s *Store) GetBirdById(birdId int) (*types.Bird, error) {
-	query := "SELECT * FROM birds WHERE id = ?"
-	rows, err := s.db.Query(query, birdId)
+func (s *Store) GetBirdById(id int) (*types.Bird, error) {
+	query := "SELECT * FROM bird-data WHERE id = ?"
+	rows, err := s.db.Query(query, id)
 	if err != nil {
 		return nil, err
 	}
@@ -32,13 +32,13 @@ func (s *Store) GetBirdById(birdId int) (*types.Bird, error) {
 		}
 	}
 	if bird.ID == 0 {
-		return nil, fmt.Errorf("bird with id %v not found", birdId)
+		return nil, fmt.Errorf("bird with id %v not found", id)
 	}
 	return bird, nil
 }
 
 func (s *Store) GetBirdByName(name string) (*types.Bird, error) {
-	query := "SELECT * FROM birds WHERE commonName = ?"
+	query := "SELECT * FROM bird-data WHERE commonName = ?"
 	rows, err := s.db.Query(query, name)
 	if err != nil {
 		return nil, err
@@ -58,7 +58,7 @@ func (s *Store) GetBirdByName(name string) (*types.Bird, error) {
 }
 
 func (s *Store) CreateBird(bird *types.Bird) error {
-	_, err := s.db.Exec("INSERT INTO birds (commonName, scientificName, description, imageUrl) VALUES (?, ?, ?, ?)", bird.CommonName, bird.ScientificName, bird.Description, bird.ImageURL)
+	_, err := s.db.Exec("INSERT INTO bird-data (commonName, scientificName, description, imageUrl) VALUES (?, ?, ?, ?)", bird.CommonName, bird.ScientificName, bird.Description, bird.ImageURL)
 	if err != nil {
 		return fmt.Errorf("failed to create bird: %w", err)
 	}
@@ -68,7 +68,7 @@ func (s *Store) CreateBird(bird *types.Bird) error {
 func (s *Store) CreateInitialBirdList(birds []types.Bird) error {
 	// loop through payload and create each bird
 	for _, bird := range birds {
-		_, err := s.db.Exec("INSERT INTO birds (commonName, scientificName, description, imageUrl) VALUES (?, ?, ?, ?)", bird.CommonName, bird.ScientificName, bird.Description, bird.ImageURL)
+		_, err := s.db.Exec("INSERT INTO bird-data (commonName, scientificName, description, imageUrl) VALUES (?, ?, ?, ?)", bird.CommonName, bird.ScientificName, bird.Description, bird.ImageURL)
 		if err != nil {
 			return fmt.Errorf("failed to create bird: %w", err)
 		}

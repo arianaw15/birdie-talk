@@ -2,42 +2,26 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 
-	"github.com/arianaw15/birdie-talk/cmd/api"
 	"github.com/arianaw15/birdie-talk/config"
-	"github.com/arianaw15/birdie-talk/db"
-	"github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func main() {
-	db, err := db.NewMySQLStorage(mysql.Config{
-		User:                 config.Envs.DBUser,
-		Passwd:               config.Envs.DBPassword,
-		Addr:                 config.Envs.DBAddress,
-		DBName:               config.Envs.DBName,
-		Net:                  "tcp",
-		AllowNativePasswords: true,
-		ParseTime:            true,
-	})
+	dsn := config.Envs.DBUser + ":" + config.Envs.DBPassword + "@tcp(127.0.0.1:3306)/birds?charset=utf8"
 
+	db, err := sql.Open("mysql", dsn)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	initStorage(db)
+	defer db.Close()
 
-	server := api.NewAPIServer(":8080", db)
-	if err := server.Run(); err != nil {
+	err = db.Ping()
+	if err != nil {
 		log.Fatal(err)
 	}
-}
-
-func initStorage(db *sql.DB) {
-	err := db.Ping()
-	if err != nil {
-		log.Fatalf("Failed to connect to the database: %v", err)
-	}
-
-	log.Println("Database connection established successfully")
+	fmt.Println("Successfully connected to database")
 }

@@ -21,6 +21,7 @@ func NewHandler(store types.BirdStore) *Handler {
 func (h *Handler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/birds/create", h.CreateBird).Methods("POST")
 	router.HandleFunc("/birds/initial", h.CreateInitialBirdList).Methods("POST")
+	router.HandleFunc("/birds/{id}", h.GetBirdById).Methods("GET")
 }
 
 func (h *Handler) CreateBird(w http.ResponseWriter, r *http.Request) {
@@ -90,4 +91,17 @@ func (h *Handler) CreateInitialBirdList(w http.ResponseWriter, r *http.Request) 
 
 	}
 	utils.WriteJSON(w, http.StatusOK, map[string]string{"message": "initial bird list created successfully"})
+}
+
+func (h *Handler) GetBirdById(w http.ResponseWriter, r *http.Request) {
+	var id int
+
+	bird, err := h.store.GetBirdById(id)
+	if err != nil {
+		utils.WriteError(w, http.StatusNotFound, fmt.Errorf("bird with id %d not found: %v", id, err))
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, bird)
+
 }
