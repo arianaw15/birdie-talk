@@ -6,5 +6,5 @@ CREATE TABLE IF NOT EXISTS birds (
     `imageUrl` VARCHAR(255) NOT NULL,
     `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
-    UNIQUE KEY (`scientificName`)
+    UNIQUE KEY (`commonName`)
 );

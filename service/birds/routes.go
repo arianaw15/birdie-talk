@@ -73,11 +73,12 @@ func (h *Handler) CreateInitialBirdList(w http.ResponseWriter, r *http.Request) 
 			return
 		}
 
-		_, err := h.store.GetBirdByName(bird.CommonName)
-		if err == nil {
+		existingBird, _ := h.store.GetBirdByName(bird.CommonName)
+
+		if existingBird != nil {
 			utils.WriteError(w, http.StatusBadRequest, fmt.Errorf(" skipping bird with common name %s as already exists", bird.CommonName))
 		} else {
-			err = h.store.CreateBird(&types.Bird{
+			err := h.store.CreateBird(&types.Bird{
 				CommonName:     bird.CommonName,
 				ScientificName: bird.ScientificName,
 				Description:    bird.Description,
@@ -85,7 +86,6 @@ func (h *Handler) CreateInitialBirdList(w http.ResponseWriter, r *http.Request) 
 			})
 			if err != nil {
 				utils.WriteError(w, http.StatusInternalServerError, fmt.Errorf("failed to create bird: %v", err))
-				return
 			}
 		}
 
