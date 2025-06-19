@@ -1,6 +1,6 @@
 # 🐦 birdie-talk (Backend)
 
-Welcome to the **birdie-talk** backend! This service powers the backend infrastructure for the birdie-talk application. It provides API endpoints to manage bird-related data and uses a MySQL database running inside a Docker container.
+Welcome to the **birdie-talk** backend! This service powers the backend infrastructure for the birdie-talk application. It provides API endpoints to manage bird-related data and uses a MySQL database running inside a Docker container. This will eventually allow users to add birds they've spotted to a list and share with their friends. It will ultimately include a front-end as well.
 
 ---
 
